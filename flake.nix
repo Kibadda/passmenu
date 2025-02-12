@@ -50,6 +50,7 @@
               rustc
               rustfmt
               rustPackages.clippy
+              rust-analyzer
             ];
             RUST_SRC_PATH = pkgs.rustPlatform.rustLibSrc;
           };
