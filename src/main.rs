@@ -4,6 +4,7 @@ mod ui;
 use crate::state::{Dir, State};
 use crate::ui::ui;
 
+use std::env;
 use std::{
     error::Error,
     io::{self, Stdout},
@@ -38,7 +39,13 @@ fn main() -> Result<(), Box<dyn Error>> {
     restore_terminal(&mut terminal)?;
 
     if let Ok(Some(key)) = res {
-        let cmd = [String::from("pass"), String::from("-c"), key];
+        let mut cmd = vec![String::from("pass"), String::from("-c"), key.clone()];
+
+        if let Ok(otp) = env::var("OTP") {
+            if otp == String::from("1") {
+                cmd = vec![String::from("pass"), String::from("otp"), String::from("-c"), key];
+            }
+        }
 
         Command::new(&cmd[0])
             .args(&cmd[1..])
