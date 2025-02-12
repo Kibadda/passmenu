@@ -41,10 +41,9 @@ fn main() -> Result<(), Box<dyn Error>> {
     if let Ok(Some(key)) = res {
         let mut cmd = vec![String::from("pass"), String::from("-c"), key.clone()];
 
-        if let Ok(otp) = env::var("OTP") {
-            if otp == String::from("1") {
-                cmd = vec![String::from("pass"), String::from("otp"), String::from("-c"), key];
-            }
+        let args: Vec<String> = env::args().collect();
+        if args.len() > 1 && args[1] == String::from("--otp") {
+            cmd = vec![String::from("pass"), String::from("otp"), String::from("-c"), key];
         }
 
         Command::new(&cmd[0])
